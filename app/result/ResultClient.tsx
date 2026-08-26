@@ -199,7 +199,8 @@ function HeroCard({
           </span>
         </div>
 
-        <p className="mt-[11px] px-3 text-center text-[16px] font-semibold leading-[22px] text-[#555]">
+        {/* 직업설명은 데이터에 \n 으로 줄 나눔이 지정돼 있어 그대로 살린다 */}
+        <p className="mt-[11px] whitespace-pre-line px-3 text-center text-[16px] font-semibold leading-[22px] text-[#555]">
           {career.descJp}
         </p>
 
@@ -228,7 +229,7 @@ function ActionRow({
       <button type="button" onClick={onShare} className="flex items-center gap-2 active:opacity-60">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/icon-share.png" alt="" aria-hidden className="h-[18px] w-[18px]" />
-        <span className="text-[12.8px] tracking-[-2px] underline underline-offset-[5px]">リンク共有</span>
+        <span className="text-[12.8px] tracking-[-1px] underline underline-offset-[5px]">リンク共有</span>
       </button>
       <button
         type="button"
@@ -238,7 +239,7 @@ function ActionRow({
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/assets/icon-download.svg" alt="" aria-hidden className="h-[21px] w-[21px]" />
-        <span className="text-[12.8px] tracking-[-2px] underline underline-offset-[5px]">
+        <span className="text-[12.8px] tracking-[-1px] underline underline-offset-[5px]">
           {saving ? '保存中…' : 'カードを保存する'}
         </span>
       </button>
