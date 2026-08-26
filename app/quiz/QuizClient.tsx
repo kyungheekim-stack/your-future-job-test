@@ -73,7 +73,7 @@ export default function QuizClient() {
   if (!ready || !question) {
     return (
       <main className="grid min-h-dvh place-items-center px-6">
-        <p className="text-sm text-muted">読み込み中…</p>
+        <p className="text-sm text-muted">読み込んでいます…</p>
       </main>
     )
   }

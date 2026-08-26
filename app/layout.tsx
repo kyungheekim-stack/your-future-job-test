@@ -36,10 +36,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'AI時代の未来職業テスト | SOCRA Tutor',
   description:
-    '20問であなたに合うAI時代の職業を占う。105職業から1つをマッチングして結果カードを作ります。',
+    '20問であなたに合うAI時代の職業を占います。105職業から1つをマッチングして結果カードを作ります。',
   openGraph: {
     title: 'AI時代の未来職業テスト',
-    description: '20問であなたに合うAI時代の職業を占う。',
+    description: '20問であなたに合うAI時代の職業を占います。',
     type: 'website',
   },
 }

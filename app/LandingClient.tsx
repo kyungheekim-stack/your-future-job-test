@@ -15,16 +15,16 @@ export default function LandingClient() {
       <div className="animate-fade-up flex flex-1 flex-col">
         <div className="flex justify-center">
           <span className="rounded-full bg-intro-badge px-[23px] py-[10px] text-[14px] font-bold tracking-[0.01em] text-white">
-            性格と可能性から、未来を見通す
+            性格と可能性から、未来を見通します
           </span>
         </div>
 
         <h1 className="mt-3 text-center text-[33px] font-black leading-[47px] tracking-[-0.01em] text-intro-ink">
           将来の職業、
           <br />
-          気にならない？
+          気になりませんか？
           <br />
-          2分でわかる。
+          2分でわかります。
         </h1>
 
         <p className="mt-[22px] text-center text-[10px] leading-[17px] text-intro-note">
@@ -42,7 +42,7 @@ export default function LandingClient() {
           onClick={() => router.push('/name')}
           className="h-[80px] w-full rounded-[20px] bg-intro-cta text-[19px] font-bold text-white transition active:scale-[0.99]"
         >
-          今すぐ自分の未来をのぞく
+          今すぐ自分の未来をのぞいてみましょう
         </button>
       </div>
     </main>

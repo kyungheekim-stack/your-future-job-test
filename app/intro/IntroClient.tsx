@@ -28,9 +28,9 @@ export default function IntroClient() {
         <h1 className="text-center text-[28.5px] font-black leading-[41px] tracking-[-0.01em] text-intro-ink">
           これから君のことを
           <br />
-          聞いていくよ、
+          聞いていきます、
           <br />
-          正直に答えてね！…🔍
+          正直にお答えください！…🔍
         </h1>
 
         <div className="mt-[60px] flex justify-center">

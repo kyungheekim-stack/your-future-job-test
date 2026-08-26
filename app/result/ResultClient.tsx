@@ -62,7 +62,7 @@ export default function ResultClient() {
 
   const shareLink = async () => {
     const url = window.location.href
-    const title = result ? `${name}の未来の職業は「${result.main.nameJp}」` : document.title
+    const title = result ? `${name}の未来の職業は「${result.main.nameJp}」です` : document.title
     try {
       if (navigator.share) {
         await navigator.share({ title, url })
@@ -105,7 +105,7 @@ export default function ResultClient() {
   if (!result) {
     return (
       <main className="result-bg grid min-h-dvh place-items-center px-6">
-        <p className="font-plex text-[12px] text-[#555]">結果を準備中…</p>
+        <p className="font-plex text-[12px] text-[#555]">結果を準備しています…</p>
       </main>
     )
   }
@@ -128,7 +128,7 @@ export default function ResultClient() {
         <h1 className="mt-[10px] text-center text-[26px] font-semibold leading-[34px] text-[#464A65]">
           {name}の
           <br />
-          未来の職業はこれ！
+          未来の職業はこれです！
         </h1>
 
         <HeroCard cardRef={cardRef} career={result.main} />
@@ -262,7 +262,7 @@ function LockedPreview({ result, onUnlock }: { result: MatchResult; onUnlock: ()
 
       <div className="absolute inset-x-0 top-[26px] flex flex-col items-center">
         <div className="relative rounded-[11px] bg-[#021439] px-[11px] py-[6px] text-[13px] font-semibold leading-[15px] text-white">
-          登録して詳細を見る
+          登録して詳細を見ましょう
           {/* 에셋의 삼각형은 위를 향하고 있어 아래를 가리키도록 뒤집는다 */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

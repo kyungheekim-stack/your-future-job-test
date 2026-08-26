@@ -53,9 +53,9 @@ export default function NameClient() {
 
       <div className="animate-fade-up flex flex-1 flex-col">
         <h1 className="mt-[45px] text-center text-[28.5px] font-black leading-[41px] tracking-[-0.01em] text-intro-ink">
-          めっちゃ楽しいよ！
+          めっちゃ楽しいですよ！
           <br />
-          まず名前を入れてね。
+          まず名前を入れてください。
         </h1>
 
         <p className="mt-[21px] text-center text-[14.5px] font-medium text-intro-sub">

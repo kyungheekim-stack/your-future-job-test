@@ -73,9 +73,9 @@ export default function LoadingClient({ participants }: { participants: number }
           </div>
         </div>
 
-        <h1 className="mt-9 text-[26px] font-black text-ink">全部わかったよ！</h1>
+        <h1 className="mt-9 text-[26px] font-black text-ink">全部わかりました！</h1>
         <p className="mt-2 text-[15px] font-medium text-muted">
-          もうすぐ未来を見せるね…！
+          もうすぐ未来をお見せしますね…！
         </p>
 
         {participants > 0 && (
