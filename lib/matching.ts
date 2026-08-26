@@ -1,8 +1,10 @@
 import { CAREERS, findCareerByName } from './data'
 import {
   APTITUDE_AFFINITY,
+  CANONICAL_BONUS,
   FREELANCER_CAREERS,
   HINT_CAREERS,
+  Q19_PICK_BONUS,
   TYPE_COMPAT,
 } from './constants'
 import {
@@ -28,9 +30,6 @@ const CANONICAL: Set<number> = (() => {
   }
   return new Set(best.values())
 })()
-
-/** 대표 가산치. 지터(0~0.9)보다 작아 다양성을 죽이지 않는 선으로 튜닝했다. */
-const CANONICAL_BONUS = 0.35
 
 function hintedNumbers(hints: string[]): Set<number> {
   const set = new Set<number>()
@@ -91,13 +90,18 @@ export function scoreCareers(rawScore: UserScore): MatchedCareer[] {
       // 5. 적성 친화도
       if (affinity.some((code) => c.riasec.includes(code))) s += 2
 
-      // 6. Q19에서 직접 고른 직업
-      if (score.pickedCareer === c.number) s += 6
+      // ── 여기까지가 Q1~Q18 이 만드는 정수 점수. 아래는 전부 소수점 이하라
+      //    정수 차이를 절대 뒤집지 못하고 동점일 때만 순서를 정한다.
+      //    (자세한 배분은 constants.ts 의 Q19_PICK_BONUS 주석 참고)
 
-      // 7. 동점 분산: 여기까지가 모두 정수라 1 미만의 지터는 동점만 흔든다.
-      //    같은 답변이면 항상 같은 값이 나오므로 결과는 재현된다.
-      s += tieBreaker(score.seed, c.number)
+      // 6. Q19에서 직접 고른 직업 — 동점 시 가장 먼저 이긴다
+      if (score.pickedCareer === c.number) s += Q19_PICK_BONUS
+
+      // 7. 같은 클러스터의 대표 직업
       if (CANONICAL.has(c.number)) s += CANONICAL_BONUS
+
+      // 8. 그래도 남는 동점은 답변 조합 해시로 갈라준다 (같은 답변 → 같은 결과)
+      s += tieBreaker(score.seed, c.number)
 
       return { ...c, matchScore: s }
     })

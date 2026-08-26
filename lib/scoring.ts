@@ -1,4 +1,4 @@
-import { APTITUDE_KEYS, RIASEC_CODES } from './constants'
+import { APTITUDE_KEYS, RIASEC_CODES, TIE_JITTER_RANGE } from './constants'
 import type {
   AptitudeKey,
   Branch,
@@ -53,7 +53,7 @@ export function hashAnswers(answers: { questionId: string; optionKey: string }[]
 
 /**
  * 같은 점수를 받은 직업들 사이의 순서를 답변 조합에 따라 흩뜨린다.
- * 0 이상 0.9 미만이라 정수 점수의 대소는 절대 뒤집지 않고, 동점만 갈라준다.
+ * 동점 처리 구간 안에서도 가장 낮은 우선순위라 Q19 선택을 밀어내지 않는다.
  */
 export function tieBreaker(seed: number, careerNumber: number): number {
   let x = (seed ^ Math.imul(careerNumber + 1, 2654435761)) >>> 0
@@ -62,17 +62,20 @@ export function tieBreaker(seed: number, careerNumber: number): number {
   x ^= x >>> 13
   x = Math.imul(x, 3266489917)
   x ^= x >>> 16
-  return ((x >>> 0) / 4294967296) * 0.9
+  return ((x >>> 0) / 4294967296) * TIE_JITTER_RANGE
 }
 
-/** "R+2", "I+1,E+1" → riasec 가산 */
-export function applyRiasec(score: UserScore, raw: string | null): void {
+/**
+ * "R+2", "I+1,E+1" → riasec 가산.
+ * weight 로 영향력을 줄일 수 있다 (Q19 는 0.2 로 들어온다).
+ */
+export function applyRiasec(score: UserScore, raw: string | null, weight = 1): void {
   if (!raw) return
   for (const token of raw.split(',')) {
     const m = token.trim().match(/^([RIASEC])\s*([+-]\d+)$/i)
     if (!m) continue
     const code = m[1].toUpperCase() as RiasecCode
-    score.riasec[code] += Number(m[2])
+    score.riasec[code] += Number(m[2]) * weight
   }
 }
 

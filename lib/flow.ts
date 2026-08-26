@@ -1,4 +1,4 @@
-import { TOTAL_QUESTIONS } from './constants'
+import { Q19_RIASEC_WEIGHT, TOTAL_QUESTIONS } from './constants'
 import { QUESTION_BY_ID } from './data'
 import { buildDynamicChoices } from './matching'
 import {
@@ -68,12 +68,13 @@ export function resolveQuestion(id: string, score: UserScore): Question | null {
 function applyAnswer(score: UserScore, question: Question, answer: Answer): void {
   const option = question.options.find((o) => o.key === answer.optionKey)
   if (!option) return
-  // Q19에서 고른 직업은 그 직업의 RIASEC 두 코드를 한 점씩 밀어준다.
+  // Q19에서 고른 직업은 그 직업의 RIASEC 두 코드를 살짝만 밀어준다.
+  // 가중치가 0.2 라 Q1~Q18 이 만든 정수 점수차는 못 뒤집고, 동점일 때만 갈린다.
   // (applyOption보다 먼저 읽어 두 번 반영되지 않게 한다)
   const code = option.careerRiasec
   applyOption(score, option)
   if (code && code.length >= 2) {
-    applyRiasec(score, `${code[0]}+1,${code[1]}+1`)
+    applyRiasec(score, `${code[0]}+1,${code[1]}+1`, Q19_RIASEC_WEIGHT)
   }
 }
 
