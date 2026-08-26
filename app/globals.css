@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page: #f0f4f8;
+  --hero: #e0ecfa;
+  --accent: #3b7dd8;
+  --fortune: #fff9c4;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--page);
+  color: #1b2733;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 모바일 우선. 데스크톱에서도 폰 폭으로 중앙 정렬한다. */
+.shell {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.32s ease-out both;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float-y 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-float {
+    animation: none;
+  }
+}
+
+
+/*
+ * 배경 소스: Home_back / result_loading_back / Card_back (모두 균일 알파 PNG).
+ * 흰 배경에 합성해 불투명 WebP 로 굽고 폭 860px(shell 430px 의 2배)로 줄여 넣었다.
+ * background-color 는 각 이미지의 아래쪽 끝 색이라 이미지가 끝나도 이어져 보인다.
+ */
+.home-bg {
+  background-color: #eaf1fd;
+  background-image: url('/images/home-back.webp');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+}
+
+.loading-bg {
+  background-color: #f6f9fd;
+  background-image: url('/images/result-loading-back.webp');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+}
+
+/* 결과는 세로로 긴 페이지라 시안처럼 전체 높이에 맞춰 늘린다. */
+.result-bg {
+  background-color: #f7fafe;
+  background-image: url('/images/card-back.webp');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% 100%;
+}
+
+/* 가입 CTA: 좌상단 보라 → 우하단 하늘색 대각선 그라디언트 */
+.signup-cta {
+  background-image: linear-gradient(
+    100deg,
+    #afa2fe 0%,
+    #79a0f8 30%,
+    #4e9ff3 58%,
+    #7cbcf8 100%
+  );
+}

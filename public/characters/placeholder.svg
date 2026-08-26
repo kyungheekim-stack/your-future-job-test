@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="キャラクター準備中">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EAF2FC"/>
+      <stop offset="1" stop-color="#D7E7F8"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <g transform="translate(38.4,-14) scale(0.85)" fill="#3B7DD8" opacity="0.85">
+    <path d="M126 300c0-64 52-116 116-116 46 0 86 27 105 66 8-20 6-44-8-66 44 18 70 62 66 108-4 52-48 94-104 96-14 26-44 42-76 38 14-12 22-28 22-44-70-6-121-40-121-82z"/>
+    <circle cx="214" cy="252" r="11" fill="#EAF2FC"/>
+  </g>
+  <text x="256" y="446" text-anchor="middle" font-family="'Noto Sans JP',system-ui,sans-serif" font-size="30" font-weight="700" fill="#8FA6BF" letter-spacing="1">Coming soon</text>
+</svg>
