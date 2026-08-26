@@ -22,21 +22,6 @@ const config: Config = {
           line: '#DADAE2', // 입력 밑줄
           say: '#6A6E89', // 인트로 하단 문구
         },
-        // 결과 카드 시안(result_card.png)에서 뽑은 값
-        res: {
-          ink: '#30344F', // 헤드라인
-          pill: '#3A82DB', // 만날 확률 뱃지
-          star: '#F5B041', // 희소성 별
-          job: '#1B478F', // 직업명 뱃지
-          desc: '#555555', // 직업 설명
-          link: '#777B96', // 공유·저장 링크
-          label: '#6A6E89', // 상세 카드 제목
-          panel: '#FAFAFA', // 상세 카드 배경
-          char: '#D9E6F3', // 캐릭터 패널 배경
-          tip: '#021439', // 툴팁 배경
-          foot: '#060E20', // 푸터 배경
-          footText: '#B5B7C6', // 푸터 본문
-        },
         fortune: '#FFF9C4',
         ink: '#1B2733',
         muted: '#6B7A8C',
@@ -65,6 +50,16 @@ const config: Config = {
           'system-ui',
           'sans-serif',
         ],
+        // 결과 페이지 시안 폰트
+        plex: [
+          'var(--font-plex-jp)',
+          '"Hiragino Sans"',
+          '"Hiragino Kaku Gothic ProN"',
+          'Meiryo',
+          'system-ui',
+          'sans-serif',
+        ],
+        inter: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
     },
   },

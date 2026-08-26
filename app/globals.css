@@ -102,9 +102,8 @@ body {
 .signup-cta {
   background-image: linear-gradient(
     100deg,
-    #afa2fe 0%,
-    #79a0f8 30%,
-    #4e9ff3 58%,
-    #7cbcf8 100%
+    #b7a3ff 0%,
+    #4c9ef3 55%,
+    #82c0f9 100%
   );
 }

@@ -39,7 +39,7 @@ export function aiTypeFg(kr: AiTypeKr): string {
 
 /** §7 대체확률 색상 */
 export function replaceRateColor(pct: number): string {
-  if (pct <= 30) return '#0F6E56'
+  if (pct <= 30) return '#168852'
   if (pct <= 60) return '#BA7517'
   return '#993C1D'
 }

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700" fill="none">
+<defs>
+<radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0.322" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></radialGradient>
+<linearGradient id="r0" x1="225.0" y1="-9.00006" x2="80.9999" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r1" x1="225.0" y1="-9.00006" x2="80.9999" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r2" x1="225.0" y1="-9.00006" x2="80.9999" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r3" x1="169.164" y1="-8.99998" x2="25.1638" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r4" x1="169.164" y1="-8.99998" x2="25.1638" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r5" x1="169.164" y1="-8.99998" x2="25.1638" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r6" x1="169.164" y1="-8.99998" x2="25.1638" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r7" x1="186.516" y1="-9.00014" x2="42.5162" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r8" x1="186.516" y1="-9.00014" x2="42.5162" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r9" x1="186.516" y1="-9.00014" x2="42.5162" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+<linearGradient id="r10" x1="225.0" y1="-9.00006" x2="80.9999" y2="188.0" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+</defs>
+<circle cx="350.0" cy="350.0" r="304.5" fill="url(#glow)" fill-opacity="0.8"/>
+<g opacity="0.85">
+<g transform="translate(350.0 350.0) rotate(-132.37) translate(-252.75 -10.25)"><path d="M0 183.5L243.5 0L262 20.5L198.25 111.75L134.5 202L0 183.5Z" fill="url(#r0)"/></g>
+<g transform="translate(350.0 350.0) rotate(-107.93) translate(-252.75 -10.25)"><path d="M0 183.5L243.5 0L262 20.5L214.5 39L94.5 176.5L0 183.5Z" fill="url(#r1)"/></g>
+<g transform="translate(350.0 350.0) rotate(-75.20) translate(-252.75 -10.25)"><path d="M0 183.5L243.5 0L262 20.5L214.5 39L94.5 176.5L0 183.5Z" fill="url(#r2)"/></g>
+<g transform="translate(350.0 350.0) rotate(-37.48) translate(-196.91 -10.25)"><path d="M0 199.666L187.664 0L206.164 20.5L158.664 39L38.6638 176.5L0 199.666Z" fill="url(#r3)"/></g>
+<g transform="translate(350.0 350.0) rotate(-4.75) translate(-196.91 -10.25)"><path d="M0 199.666L187.664 0L206.164 20.5L158.664 39L38.6638 176.5L0 199.666Z" fill="url(#r4)"/></g>
+<g transform="translate(350.0 350.0) rotate(27.97) translate(-196.91 -10.25)"><path d="M0 199.666L187.664 0L206.164 20.5L158.664 39L38.6638 176.5L0 199.666Z" fill="url(#r5)"/></g>
+<g transform="translate(350.0 350.0) rotate(60.70) translate(-196.91 -10.25)"><path d="M0 199.666L187.664 0L206.164 20.5L158.664 39L38.6638 176.5L0 199.666Z" fill="url(#r6)"/></g>
+<g transform="translate(350.0 350.0) rotate(91.84) translate(-214.27 -10.25)"><path d="M0 194.906L205.016 0L223.516 20.5L176.016 39L56.0161 176.5L0 194.906Z" fill="url(#r7)"/></g>
+<g transform="translate(350.0 350.0) rotate(124.56) translate(-214.27 -10.25)"><path d="M0 194.906L205.016 0L223.516 20.5L176.016 39L56.0161 176.5L0 194.906Z" fill="url(#r8)"/></g>
+<g transform="translate(350.0 350.0) rotate(157.29) translate(-214.27 -10.25)"><path d="M0 194.906L205.016 0L223.516 20.5L176.016 39L56.0161 176.5L0 194.906Z" fill="url(#r9)"/></g>
+<g transform="translate(350.0 350.0) rotate(194.90) translate(-252.75 -10.25)"><path d="M0 183.5L243.5 0L262 20.5L198.25 111.75L134.5 202L0 183.5Z" fill="url(#r10)"/></g>
+</g></svg>

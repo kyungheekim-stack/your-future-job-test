@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
-import { Noto_Sans_JP } from 'next/font/google'
+import { IBM_Plex_Sans_JP, Inter, Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 
 /**
@@ -15,6 +15,22 @@ const notoSansJP = Noto_Sans_JP({
   display: 'swap',
   variable: '--font-noto-sans-jp',
   fallback: ['Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', 'system-ui', 'sans-serif'],
+})
+
+/** 결과 페이지 시안 폰트 (figma_result_reference.md) */
+const plexJP = IBM_Plex_Sans_JP({
+  weight: ['400', '500', '600', '700'],
+  preload: false,
+  display: 'swap',
+  variable: '--font-plex-jp',
+  fallback: ['Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', 'system-ui', 'sans-serif'],
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  display: 'swap',
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
@@ -36,7 +52,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ja" className={notoSansJP.variable}>
+    <html
+      lang="ja"
+      className={`${notoSansJP.variable} ${plexJP.variable} ${inter.variable}`}
+    >
       <body className="font-sans">
         <div className="shell">{children}</div>
       </body>

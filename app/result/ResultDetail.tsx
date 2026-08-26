@@ -1,114 +1,127 @@
-import CharacterImage from '@/components/CharacterImage'
 import { aiTypeBg, aiTypeFg, replaceRateColor } from '@/lib/constants'
 import type { Career, MatchResult } from '@/lib/types'
 
 /**
- * 결과 상세(시안 result_card.png 하단).
- * 가입 전에는 이 컴포넌트를 그대로 블러 처리해 잠금 미리보기로 쓴다.
+ * 결과 상세 (figma_result_reference.md 기준, 1080px → shell 430px 로 비례 축소).
+ * 가입 전에는 이 컴포넌트를 그대로 blur 처리해 잠금 미리보기로 쓴다.
+ * 섹션 순서: AI타입+연봉 → AI대체확률 → 필요스킬 → 쌓아야할스펙 → 튜터한마디 → 부업추천
  */
 export default function ResultDetail({ result }: { result: MatchResult }) {
   const { main, subs } = result
   const riskColor = replaceRateColor(main.replaceRate)
 
   return (
-    <div className="space-y-3">
-      {/* AI 관계 타입 + 예상 연봉 */}
-      <div className="grid grid-cols-2 gap-3">
-        <Panel>
-          <Label icon="🏷️">AI関係タイプ</Label>
+    <div className="space-y-[13px]">
+      {/* AI 관계 타입 + 예상 연봉 (2열) */}
+      <div className="grid grid-cols-2 gap-[13px]">
+        <Box pad="11px">
+          <Title icon="🏷️">AI関係タイプ</Title>
           <span
-            className="mt-3 inline-block rounded-lg px-3 py-1.5 text-[14px] font-bold"
+            className="mt-[9px] inline-block rounded-[8px] px-[9px] py-[5px] text-[11px] font-semibold"
             style={{ backgroundColor: aiTypeBg(main.aiTypeKr), color: aiTypeFg(main.aiTypeKr) }}
           >
             {main.aiTypeJp}
           </span>
-        </Panel>
-        <Panel>
-          <Label icon="💰">予想年収</Label>
-          <p className="mt-2 text-[26px] font-black leading-none text-[#22262E]">
+        </Box>
+        <Box pad="11px">
+          <Title icon="💰">予想年収</Title>
+          <p className="mt-[7px] font-inter text-[19px] font-bold leading-none text-[#333]">
             {main.salary.toLocaleString('ja-JP')}
-            <span className="ml-1 text-[13px] font-bold text-res-label">万円/年</span>
+            <span className="ml-[3px] font-plex text-[11px] font-medium text-[#666]">万円/年</span>
           </p>
-        </Panel>
+        </Box>
       </div>
 
       {/* AI 대체 확률 */}
-      <Panel>
-        <Label icon="🤖">AIに代替される確率</Label>
-        <div className="mt-4 flex items-end justify-between">
-          <span className="text-[14px] text-[#9AA0AC]">代替確率</span>
-          <span className="text-[24px] font-black leading-none" style={{ color: riskColor }}>
+      <Box>
+        <Title icon="🤖">AIに代替される確率</Title>
+        <div className="mt-[14px] flex items-end justify-between">
+          <span className="text-[10.5px] tracking-[-0.41px] text-[#999]">代替確率</span>
+          <span
+            className="font-inter text-[22px] font-bold leading-none"
+            style={{ color: riskColor }}
+          >
             {main.replaceRate}%
           </span>
         </div>
-        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[#E9EAEC]">
+        <div className="mt-[10px] h-[7px] w-full overflow-hidden rounded-full bg-[#EDEDED]">
           <div
             className="h-full rounded-full"
             style={{
-              width: `${Math.min(100, Math.max(2, main.replaceRate))}%`,
+              width: `${Math.min(100, Math.max(3, main.replaceRate))}%`,
               backgroundColor: riskColor,
             }}
           />
         </div>
-      </Panel>
+      </Box>
 
       {/* 필요 스킬 */}
-      <Panel>
-        <Label icon="💡">必要なスキル</Label>
-        <div className="mt-3.5 flex flex-wrap gap-2">
+      <Box>
+        <Title icon="💡">必要なスキル</Title>
+        <div className="mt-[12px] flex flex-wrap gap-[7px]">
           {main.skillsJp.map((skill) => (
             <span
               key={skill}
-              className="rounded-full border border-[#D3D5DA] px-3.5 py-2 text-[13px] text-[#3A3F4A]"
+              className="rounded-[16px] border border-[#E0E0E0] bg-white px-[11px] py-[6px] text-[10.5px] tracking-[-0.41px] text-[#444]"
             >
               {skill}
             </span>
           ))}
         </div>
-      </Panel>
+      </Box>
 
       {/* 쌓아야 할 스펙 */}
-      <Panel>
-        <Label icon="📋">積むべきスペック</Label>
-        <ol className="mt-3 space-y-2.5">
+      <Box>
+        <Title icon="📋">積むべきスペック</Title>
+        <ol className="mt-[11px] space-y-[9px]">
           {main.todosJp.map((todo, i) => (
-            <li key={todo} className="flex items-start gap-2.5">
-              <span className="mt-px grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full bg-res-job text-[11px] font-bold text-white">
+            <li key={todo} className="flex items-start gap-[8px]">
+              <span className="grid h-4 w-4 shrink-0 place-items-center rounded-[8px] bg-[#1B478E] font-inter text-[9px] font-semibold text-white">
                 {i + 1}
               </span>
-              <span className="text-[14px] leading-[22px] text-[#3A3F4A]">{todo}</span>
+              <span className="pt-px text-[10.5px] leading-[16px] tracking-[-0.41px] text-[#444]">
+                {todo}
+              </span>
             </li>
           ))}
         </ol>
-      </Panel>
+      </Box>
 
-      {/* 튜터의 한마디 */}
-      <div className="rounded-2xl bg-fortune px-5 py-5">
-        <Label icon="✨">チューターの一言</Label>
-        <p className="mt-2.5 text-[14px] leading-[22px] text-[#3A3F4A]">{main.tutorJp}</p>
+      {/* 튜터의 한마디 — 시안은 흰 배경 */}
+      <div className="rounded-[11px] bg-white px-[13px] py-[13px]">
+        <Title icon="✨">チューターの一言</Title>
+        <p className="mt-[9px] text-[10.5px] leading-[17px] tracking-[-0.41px] text-[#444]">
+          {main.tutorJp}
+        </p>
       </div>
 
       {/* 부업 추천 */}
-      <Panel>
-        <Label icon="🎁">副業におすすめ</Label>
-        <ul className="mt-3 space-y-2">
+      <Box>
+        <Title icon="🎁">副業におすすめ</Title>
+        <ul className="mt-[11px] space-y-[7px]">
           {subs.map((sub) => (
             <SubRow key={sub.number} career={sub} />
           ))}
         </ul>
-      </Panel>
+      </Box>
     </div>
   )
 }
 
-function Panel({ children }: { children: React.ReactNode }) {
-  return <div className="rounded-2xl bg-res-panel px-5 py-5">{children}</div>
+function Box({ children, pad = '13px' }: { children: React.ReactNode; pad?: string }) {
+  return (
+    <div className="rounded-[11px] bg-[#FAFAFA]" style={{ padding: pad }}>
+      {children}
+    </div>
+  )
 }
 
-function Label({ icon, children }: { icon: string; children: React.ReactNode }) {
+function Title({ icon, children }: { icon: string; children: React.ReactNode }) {
   return (
-    <p className="flex items-center gap-1.5 text-[15px] font-bold text-res-label">
-      <span aria-hidden>{icon}</span>
+    <p className="flex items-center gap-[5px] font-plex text-[12px] font-semibold text-[#333]">
+      <span aria-hidden className="text-[11px] leading-none">
+        {icon}
+      </span>
       {children}
     </p>
   )
@@ -116,22 +129,11 @@ function Label({ icon, children }: { icon: string; children: React.ReactNode }) 
 
 function SubRow({ career }: { career: Career }) {
   return (
-    <li className="flex items-center gap-3 rounded-xl bg-white px-4 py-3.5 shadow-[0_1px_3px_rgba(31,68,116,0.06)]">
-      <div className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg bg-res-char">
-        <CharacterImage
-          number={career.number}
-          riasec={career.riasec}
-          alt=""
-          className="h-full w-full object-contain"
-        />
-      </div>
-      <p className="min-w-0 flex-1 truncate text-[15px] font-bold text-[#22262E]">
+    <li className="flex items-center gap-2 rounded-[10px] bg-white px-[10px] py-[6px]">
+      <p className="min-w-0 flex-1 truncate text-[11px] font-semibold text-[#333]">
         {career.nameJp}
       </p>
-      <span
-        className="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold"
-        style={{ backgroundColor: aiTypeBg(career.aiTypeKr), color: aiTypeFg(career.aiTypeKr) }}
-      >
+      <span className="shrink-0 rounded-[8px] bg-[#E6F1FB] px-[7px] py-[3px] font-inter text-[8.5px] font-semibold text-[#1B478E]">
         {career.aiTypeJp}
       </span>
     </li>
