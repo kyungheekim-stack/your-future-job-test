@@ -24,7 +24,7 @@ export default function LandingClient() {
           <br />
           気になりませんか？
           <br />
-          2分でわかります。
+          5分でわかります。
         </h1>
 
         <p className="mt-[22px] text-center text-[10px] leading-[17px] text-intro-note">
