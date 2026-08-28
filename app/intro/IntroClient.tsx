@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import CrystalBall from '@/components/CrystalBall'
+import ParticipantCount from '@/components/ParticipantCount'
 import { loadSession } from '@/lib/session'
 
 const DWELL = 2600
@@ -37,8 +38,11 @@ export default function IntroClient() {
           <CrystalBall className="w-[138px] animate-float" priority />
         </div>
 
-        <p className="mt-[46px] text-center text-[19px] font-medium text-intro-say">
-          正直に答えてくださいね！
+        {/* 시안의 00000 자리 — 실제 집계가 아니라 시각 기반 연출값 (lib/participants.ts) */}
+        <p className="mt-[46px] text-center text-[19px] font-medium leading-[28px] text-intro-say">
+          今このテストに
+          <br />
+          <ParticipantCount />名が参加しています···
         </p>
 
         <div className="flex-1" />

@@ -2,12 +2,14 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import ParticipantCount from '@/components/ParticipantCount'
 import { planQuiz } from '@/lib/flow'
+import { PARTICIPANT_ENABLED } from '@/lib/participants'
 import { loadSession } from '@/lib/session'
 
 const DURATION = 2600
 
-export default function LoadingClient({ participants }: { participants: number }) {
+export default function LoadingClient() {
   const router = useRouter()
   const [pct, setPct] = useState(0)
 
@@ -78,9 +80,9 @@ export default function LoadingClient({ participants }: { participants: number }
           もうすぐ未来をお見せしますね…！
         </p>
 
-        {participants > 0 && (
+        {PARTICIPANT_ENABLED && (
           <p className="mt-10 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-accent shadow-soft">
-            これまでに {participants.toLocaleString('ja-JP')} 人が診断しました
+            これまでに <ParticipantCount format="comma" /> 人が診断しました
           </p>
         )}
       </div>
