@@ -40,7 +40,7 @@ export default function LandingClient() {
         <button
           type="button"
           onClick={() => router.push('/name')}
-          className="h-[80px] w-full rounded-[20px] bg-intro-cta text-[19px] font-bold text-white transition active:scale-[0.99]"
+          className="h-[80px] w-full rounded-[20px] bg-intro-cta text-[19px] font-bold tracking-[-1px] text-white transition active:scale-[0.99]"
         >
           今すぐ自分の未来をのぞいてみましょう
         </button>
