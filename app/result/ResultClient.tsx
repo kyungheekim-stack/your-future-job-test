@@ -265,13 +265,20 @@ function HeroCard({
             className="pointer-events-none absolute left-1/2 top-[92px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-80"
           />
 
-          {/* 캐릭터 508 → 202 / top 101 → 40 */}
-          <CharacterImage
-            number={career.number}
-            riasec={career.riasec}
-            alt={career.nameJp}
-            className="absolute left-1/2 top-[40px] size-[202px] -translate-x-1/2 object-contain mix-blend-multiply"
-          />
+          {/* 캐릭터.
+              - 블렌드 모드를 쓰지 않는다. 예전엔 흰 배경을 지우려고 mix-blend-multiply
+                를 걸었는데, 그러면 패널 그라디언트가 캐릭터에 비쳐 보였다.
+                지금은 PNG 자체에 알파가 있어서 그냥 얹으면 100% 불투명하게 나온다.
+              - 직업명이 앉는 아래쪽 42px 를 뺀 영역에 flex 로 중앙 정렬한다.
+                고정 top 값을 주면 캐릭터마다 여백이 달라 위로 떠 보인다. */}
+          <div className="absolute inset-x-0 bottom-[42px] top-0 flex items-center justify-center px-[10px]">
+            <CharacterImage
+              number={career.number}
+              riasec={career.riasec}
+              alt={career.nameJp}
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
 
           {/* 희소성 문구 23px → 9.2 / 흰색 / 좌상단 */}
           <p className="absolute left-[12px] top-[8px] text-[9.2px] font-semibold tracking-[-0.37px] text-white">
