@@ -94,12 +94,14 @@ export default function ResultDetail({ result }: { result: MatchResult }) {
         {/* 튜터의 한마디: bg #EFF3FE / rounded 44 / px 40 py 36 / gap 34 */}
         <section className="flex items-center gap-[13.5px] rounded-[17.5px] bg-[#EFF3FE] px-[16px] py-[14px]">
           <div className="grid size-[52px] shrink-0 place-items-center overflow-hidden rounded-full bg-white">
+            {/* 원본 PNG 는 좌우 여백이 넓고 피사체가 오른쪽으로 치우쳐 있었다.
+                피사체 bbox 로 잘라 정사각형 정중앙에 다시 앉힌 에셋을 쓴다. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/tutor-avatar.png"
               alt=""
               aria-hidden
-              className="h-[49px] w-[65px] max-w-none object-cover"
+              className="size-[44px] object-contain"
             />
           </div>
           <div className="min-w-0 flex-1 text-[#30344F]">
