@@ -278,7 +278,7 @@ function HeroCard({
             src="/assets/halo.svg"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[121px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-80"
+            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[121px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-45 blur-[7px]"
           />
 
           {/* 캐릭터. 시안 508 → 202, 패널 상단에서 101 → 40, 가로 중앙.
