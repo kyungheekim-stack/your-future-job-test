@@ -15,7 +15,15 @@ import type { Career, MatchResult } from './types'
  * d 는 "공유한 사람이 가입자였는지"다. 시안 4종 중 공유 페이지 2종이
  * 각각 블러/선명으로 갈리는 기준이 받는 사람이 아니라 보낸 사람이라서다.
  */
-export const SHARE_PARAM = { career: 'c', name: 'n', detail: 'd' } as const
+export const SHARE_PARAM = {
+  career: 'c',
+  name: 'n',
+  detail: 'd',
+  /** 'own' 이면 테스트를 풀지 않아도 '본인' 화면으로 그린다 (시안 확인용) */
+  view: 'view',
+  /** 1 이면 가입 완료 상태 */
+  member: 'm',
+} as const
 
 export function buildShareUrl(
   origin: string,

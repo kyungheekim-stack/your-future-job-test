@@ -70,9 +70,14 @@ export default function ResultClient() {
         router.replace('/')
         return
       }
-      setViewer('shared')
+      // view=own 이면 테스트를 풀지 않아도 '본인' 화면을 그린다.
+      // 시안 4종을 URL 만으로 확인하려고 열어 둔 통로다 (결과 카드 외에는 아무것도 노출하지 않는다).
+      const asOwner = query.get(SHARE_PARAM.view) === 'own'
+      const member = query.get(SHARE_PARAM.member) === '1'
+      setViewer(asOwner ? 'owner' : 'shared')
+      setIsMember(asOwner && member)
       setName(query.get(SHARE_PARAM.name) ?? '')
-      setDetailOpen(query.get(SHARE_PARAM.detail) === '1')
+      setDetailOpen(asOwner ? member : query.get(SHARE_PARAM.detail) === '1')
       setResult(restored)
       return
     }
@@ -87,7 +92,7 @@ export default function ResultClient() {
       router.replace('/quiz')
       return
     }
-    const member = query.get('m') === '1'
+    const member = query.get(SHARE_PARAM.member) === '1'
     setViewer('owner')
     setName(stored.name)
     setIsMember(member)
