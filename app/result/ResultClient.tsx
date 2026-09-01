@@ -180,6 +180,12 @@ export default function ResultClient() {
   }
 
   const showTwoButtons = viewer === 'owner' && !detailOpen
+  /**
+   * '가입한 본인이 자기 결과를 보는 화면'만 특별 취급한다.
+   * 시안에서 이 화면만 배경이 핑크고 푸터가 없다.
+   * 나머지 3종(비회원 본인 / 비회원 공유 / 가입 공유)은 전부 블루 + 푸터 있음.
+   */
+  const isMemberOwnView = viewer === 'owner' && detailOpen
 
   return (
     <main className="flex min-h-dvh flex-col bg-white font-plex">
@@ -189,7 +195,7 @@ export default function ResultClient() {
       >
         {/* 히어로 구간. 그라디언트를 <main> 전체가 아니라 이 블록에만 건다.
             (전체에 걸면 페이지 길이에 따라 퍼져서 거의 단색으로 보인다) */}
-        <section className={detailOpen ? 'hero-pink' : 'hero-blue'}>
+        <section className={isMemberOwnView ? 'hero-pink' : 'hero-blue'}>
           <Header />
           {/* 시안: 65px SemiBold #464A65 / 줄간격 1.25 / 자간 -1.95 */}
           <h1 className="mt-[44px] text-center text-[26px] font-semibold leading-[1.25] tracking-[-0.78px] text-[#464A65]">
@@ -216,7 +222,7 @@ export default function ResultClient() {
         </div>
 
         {/* 시안 4종 중 '본인·가입완료'(29409:3891)에만 푸터가 없다 */}
-        {!(viewer === 'owner' && detailOpen) && <Footer />}
+        {!isMemberOwnView && <Footer />}
       </div>
 
       <FloatingCta
