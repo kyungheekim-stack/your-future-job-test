@@ -111,25 +111,27 @@ body {
 
 /*
  * 결과 히어로 배경 — 시안의 「🔵 상단 히어로 배경 (색 여기서 바꾸기)」.
- * 카드 뒤에서 퍼지는 방사형 그라디언트다. 시안 4종을 그대로 옮기면
- * 비회원 티저는 파랑, 가입 완료 상세는 핑크다. 색만 바꾸면 다른 톤이 된다.
+ *
+ * 시안 PNG 의 세로 단면을 재 보면 위쪽은 흰색이고, 카드 한가운데(y≈1300/1080폭)
+ * 에서 가장 진해졌다가 다시 흰색으로 빠진다. 진한 곳도 아주 옅다.
+ *   비회원  가장 진한 값 #E4F3FF
+ *   가입완료 가장 진한 값 #FBD8EB
+ * 카드 중심이 이 구간의 60% 근처라 그 자리에 초점을 둔다.
  */
 .hero-blue {
-  background: radial-gradient(
-    120% 46% at 50% 23%,
-    rgba(133, 196, 255, 0.85) 0%,
-    rgba(198, 228, 255, 0.75) 34%,
-    #ffffff 82%
+  background-image: radial-gradient(
+    82% 44% at 50% 60%,
+    #e4f3ff 0%,
+    #edf7ff 46%,
+    #ffffff 88%
   );
-  background-color: #ffffff;
 }
 
 .hero-pink {
-  background: radial-gradient(
-    120% 46% at 50% 23%,
-    rgba(182, 32, 67, 0.8) 0%,
-    rgba(249, 199, 227, 0.95) 34%,
-    #ffffff 82%
+  background-image: radial-gradient(
+    82% 44% at 50% 60%,
+    #fbd8eb 0%,
+    #fde9f3 46%,
+    #ffffff 88%
   );
-  background-color: #ffffff;
 }

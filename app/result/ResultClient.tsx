@@ -182,40 +182,41 @@ export default function ResultClient() {
   const showTwoButtons = viewer === 'owner' && !detailOpen
 
   return (
-    <main
-      className={`flex min-h-dvh flex-col font-plex ${
-        detailOpen ? 'hero-pink' : 'hero-blue'
-      }`}
-    >
-      <Header />
-
+    <main className="flex min-h-dvh flex-col bg-white font-plex">
       <div
         className="animate-fade-up flex flex-1 flex-col"
         style={{ paddingBottom: showTwoButtons ? 176 : 132 }}
       >
-        {/* 시안: 65px SemiBold #464A65 / 줄간격 1.25 / 자간 -1.95 */}
-        <h1 className="mt-[44px] text-center text-[26px] font-semibold leading-[1.25] tracking-[-0.78px] text-[#464A65]">
+        {/* 히어로 구간. 그라디언트를 <main> 전체가 아니라 이 블록에만 건다.
+            (전체에 걸면 페이지 길이에 따라 퍼져서 거의 단색으로 보인다) */}
+        <section className={detailOpen ? 'hero-pink' : 'hero-blue'}>
+          <Header />
+          {/* 시안: 65px SemiBold #464A65 / 줄간격 1.25 / 자간 -1.95 */}
+          <h1 className="mt-[44px] text-center text-[26px] font-semibold leading-[1.25] tracking-[-0.78px] text-[#464A65]">
           {name && `${name}の`}
           <br />
           未来の職業はこれ！
-        </h1>
+          </h1>
 
-        <HeroCard cardRef={cardRef} career={result.main} />
+          <HeroCard cardRef={cardRef} career={result.main} />
 
-        {viewer === 'owner' && (
-          <CardLink
-            kind={detailOpen ? 'save' : 'retake'}
-            saving={saving}
-            onClick={detailOpen ? saveCard : retake}
-          />
-        )}
-        {toast && <p className="mt-2 px-6 text-center text-[10.5px] text-[#5D617C]">{toast}</p>}
+          {viewer === 'owner' && (
+            <CardLink
+              kind={detailOpen ? 'save' : 'retake'}
+              saving={saving}
+              onClick={detailOpen ? saveCard : retake}
+            />
+          )}
+          {toast && <p className="mt-2 px-6 text-center text-[10.5px] text-[#5D617C]">{toast}</p>}
+          <div className="h-[26px]" />
+        </section>
 
-        <div ref={detailRef} className="mt-[26px]">
+        <div ref={detailRef}>
           {detailOpen ? <ResultDetail result={result} /> : <LockedDetail result={result} />}
         </div>
 
-        <Footer />
+        {/* 시안 4종 중 '본인·가입완료'(29409:3891)에만 푸터가 없다 */}
+        {!(viewer === 'owner' && detailOpen) && <Footer />}
       </div>
 
       <FloatingCta
@@ -261,29 +262,23 @@ function HeroCard({
       >
         {/* 캐릭터 패널 714x727 → 284x289 / rounded 39 → 15.5 / 그라디언트 #4FA2F8 → #7775FD */}
         <div className="relative h-[289px] w-full overflow-hidden rounded-[15.5px] bg-gradient-to-b from-[#4FA2F8] to-[#7775FD]">
-          {/* 후광 (원 + 방사형 광선) */}
+          {/* 후광. 시안 Ellipse12: 지름 609 → 242, 중심은 패널 중앙에서 x+16.5 y-59 */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/halo.svg"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-[92px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-80"
+            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[121px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-80"
           />
 
-          {/* 캐릭터.
-              - 블렌드 모드를 쓰지 않는다. 예전엔 흰 배경을 지우려고 mix-blend-multiply
-                를 걸었는데, 그러면 패널 그라디언트가 캐릭터에 비쳐 보였다.
-                지금은 PNG 자체에 알파가 있어서 그냥 얹으면 100% 불투명하게 나온다.
-              - 직업명이 앉는 아래쪽 42px 를 뺀 영역에 flex 로 중앙 정렬한다.
-                고정 top 값을 주면 캐릭터마다 여백이 달라 위로 떠 보인다. */}
-          <div className="absolute inset-x-0 bottom-[42px] top-0 flex items-center justify-center px-[10px]">
-            <CharacterImage
-              number={career.number}
-              riasec={career.riasec}
-              alt={career.nameJp}
-              className="max-h-full w-auto object-contain"
-            />
-          </div>
+          {/* 캐릭터. 시안 508 → 202, 패널 상단에서 101 → 40, 가로 중앙.
+              PNG 에 알파가 있어 블렌드 모드 없이 100% 불투명하게 얹힌다. */}
+          <CharacterImage
+            number={career.number}
+            riasec={career.riasec}
+            alt={career.nameJp}
+            className="absolute left-1/2 top-[40px] size-[202px] -translate-x-1/2 object-contain"
+          />
 
           {/* 희소성 문구 23px → 9.2 / 흰색 / 좌상단 */}
           <p className="absolute left-[12px] top-[8px] text-[9.2px] font-semibold tracking-[-0.37px] text-white">
