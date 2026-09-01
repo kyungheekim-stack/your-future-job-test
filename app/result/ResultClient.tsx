@@ -185,11 +185,13 @@ function HeroCard({
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-1/2 w-[125%] -translate-x-1/2 -translate-y-1/2 opacity-70"
           />
+          {/* 캐릭터 PNG 가 불투명(흰 배경)이라 contain 이면 좌우에 띠가 남는다.
+              시안처럼 패널을 꽉 채우도록 cover 로 덮는다. */}
           <CharacterImage
             number={career.number}
             riasec={career.riasec}
             alt={career.nameJp}
-            className="relative h-full w-full object-contain"
+            className="relative h-full w-full object-cover"
           />
         </div>
 
