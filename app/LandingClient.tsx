@@ -34,7 +34,7 @@ export default function LandingClient() {
         </p>
 
         <div className="flex flex-1 items-center justify-center py-4">
-          <CrystalBall className="w-[186px]" priority />
+          <CrystalBall className="w-[186px]" spin priority />
         </div>
 
         <button

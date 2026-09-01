@@ -177,17 +177,22 @@ export default function ResultClient() {
   const showTwoButtons = viewer === 'owner' && !detailOpen
 
   return (
-    <main className="result-bg flex min-h-dvh flex-col font-plex">
+    <main
+      className={`flex min-h-dvh flex-col font-plex ${
+        detailOpen ? 'hero-pink' : 'hero-blue'
+      }`}
+    >
       <Header />
 
       <div
         className="animate-fade-up flex flex-1 flex-col"
         style={{ paddingBottom: showTwoButtons ? 176 : 132 }}
       >
-        <h1 className="mt-[10px] text-center text-[26px] font-semibold leading-[34px] text-[#464A65]">
+        {/* 시안: 65px SemiBold #464A65 / 줄간격 1.25 / 자간 -1.95 */}
+        <h1 className="mt-[44px] text-center text-[26px] font-semibold leading-[1.25] tracking-[-0.78px] text-[#464A65]">
           {name && `${name}の`}
           <br />
-          未来の職業はこれです！
+          未来の職業はこれ！
         </h1>
 
         <HeroCard cardRef={cardRef} career={result.main} />
@@ -201,7 +206,7 @@ export default function ResultClient() {
         )}
         {toast && <p className="mt-2 px-6 text-center text-[10.5px] text-[#5D617C]">{toast}</p>}
 
-        <div ref={detailRef} className="mt-[22px] px-4">
+        <div ref={detailRef} className="mt-[26px]">
           {detailOpen ? <ResultDetail result={result} /> : <LockedDetail result={result} />}
         </div>
 
@@ -223,10 +228,11 @@ export default function ResultClient() {
 
 function Header() {
   return (
-    <header className="flex h-[56px] items-center bg-white px-5">
+    // 시안: h 154 / 하단 보더 3px #E3E4EB / 로고 좌 27, 높이 48
+    <header className="flex h-[61px] items-center border-b border-[#E3E4EB] bg-white px-[27px]">
       <a href={LANDING_URL} aria-label="SOCRA Tutor ホーム">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/logo.svg" alt="SOCRA Tutor" className="h-[15px] w-auto" />
+        <img src="/assets/logo.svg" alt="SOCRA Tutor" className="h-[19px] w-auto" />
       </a>
     </header>
   )
@@ -242,15 +248,46 @@ function HeroCard({
   career: Career
 }) {
   return (
-    <div className="mt-[26px] px-[41px]">
-      {/* 시안: 라운드 40(→16px), 흰 테두리 18(→7px), 하단 패딩 48(→19px) */}
-      <div ref={cardRef} className="rounded-[16px] bg-white p-[7px] pb-[19px]">
-        <div className="flex items-center justify-between px-[2px] pb-[7px] pt-[3px]">
-          <span className="rounded-[16px] bg-[#3A82DB] px-[13px] py-[6px] font-inter text-[13.5px] font-semibold leading-none text-white">
+    <div className="mt-[28px] flex justify-center">
+      {/* 카드 794x1043 → 316x415 / rounded 63 → 25 / shadow 0 0 76px rgba(185,186,210,.6) */}
+      <div
+        ref={cardRef}
+        className="relative w-[316px] rounded-[25px] bg-white px-[16px] pb-[19px] pt-[17px] shadow-[0_0_30px_0_rgba(185,186,210,0.6)]"
+      >
+        {/* 캐릭터 패널 714x727 → 284x289 / rounded 39 → 15.5 / 그라디언트 #4FA2F8 → #7775FD */}
+        <div className="relative h-[289px] w-full overflow-hidden rounded-[15.5px] bg-gradient-to-b from-[#4FA2F8] to-[#7775FD]">
+          {/* 후광 (원 + 방사형 광선) */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/halo.svg"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-[92px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-80"
+          />
+
+          {/* 캐릭터 508 → 202 / top 101 → 40 */}
+          <CharacterImage
+            number={career.number}
+            riasec={career.riasec}
+            alt={career.nameJp}
+            className="absolute left-1/2 top-[40px] size-[202px] -translate-x-1/2 object-contain mix-blend-multiply"
+          />
+
+          {/* 희소성 문구 23px → 9.2 / 흰색 / 좌상단 */}
+          <p className="absolute left-[12px] top-[8px] text-[9.2px] font-semibold tracking-[-0.37px] text-white">
             {career.probJp}
-          </span>
+          </p>
+
+          {/* 직업명 50px → 20 / 흰색 Bold / 패널 하단에서 17 */}
+          <p className="absolute inset-x-0 bottom-[17px] text-center text-[20px] font-bold tracking-[-0.8px] text-white">
+            {career.nameJp}
+          </p>
+        </div>
+
+        {/* 별점 pill — 패널 위쪽으로 걸쳐 나온다 (card top 22, 패널 top 43) */}
+        <div className="absolute right-[14px] top-[9px] flex h-[28px] items-center justify-center gap-[3px] rounded-full border-[2.4px] border-[#B7A3FF] bg-white px-[10px]">
           <span
-            className="pr-[3px] font-inter text-[20px] leading-none tracking-[0.06em] text-[#F5B041]"
+            className="font-inter text-[13px] leading-none tracking-[0.08em] text-[#F5B041]"
             aria-label={career.rarity}
           >
             {'★'.repeat(career.rarityStars)}
@@ -258,39 +295,19 @@ function HeroCard({
           </span>
         </div>
 
-        {/* 캐릭터: 후광(원+광선) 위에 얹는다. 높이 720 → 287px */}
-        <div className="relative h-[287px] w-full overflow-hidden rounded-[10px] bg-gradient-to-br from-[#DADAE2] to-[#B3E0FF]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/halo.svg"
-            alt=""
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 w-[125%] -translate-x-1/2 -translate-y-1/2 opacity-70"
-          />
-          {/* 캐릭터 PNG 가 불투명(흰 배경)이라 contain 이면 좌우에 띠가 남는다.
-              시안처럼 패널을 꽉 채우도록 cover 로 덮는다. */}
-          <CharacterImage
-            number={career.number}
-            riasec={career.riasec}
-            alt={career.nameJp}
-            className="relative h-full w-full object-cover"
-          />
-        </div>
-
-        <div className="mt-[13px] flex justify-center px-[8px]">
-          <span className="w-full rounded-[6px] bg-gradient-to-r from-[#2766C4] to-[#0E2759] px-3 py-[9px] text-center font-inter text-[18px] font-semibold leading-tight text-white">
-            {career.nameJp}
-          </span>
-        </div>
-
-        {/* 직업설명은 데이터에 줄 나눔이 지정돼 있어 그대로 살린다 */}
-        <p className="mt-[11px] whitespace-pre-line px-3 text-center text-[16px] font-semibold leading-[22px] text-[#555]">
+        {/* 직업설명 36px → 14.3 / #5D617C / 줄간격 1.41 — 데이터에 줄 나눔이 들어 있다 */}
+        <p className="mt-[15px] whitespace-pre-line text-center text-[14.3px] font-semibold leading-[1.41] tracking-[-0.57px] text-[#5D617C]">
           {career.descJp}
         </p>
 
-        <div className="mt-[14px] flex justify-center">
+        {/* 카드 하단 로고 224x27 → 89x11 */}
+        <div className="mt-[18px] flex justify-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/logo.svg" alt="SOCRA Tutor" className="h-[11px] w-auto" />
+          <img
+            src="/assets/logo.svg"
+            alt="SOCRA Tutor"
+            className="h-[11px] w-auto opacity-30"
+          />
         </div>
       </div>
     </div>
@@ -344,13 +361,10 @@ function LockedDetail({ result }: { result: MatchResult }) {
   return (
     <div className="relative">
       {/* 시안: 상세를 blur(10px) 로 흐리게 깔아 "더 있다"를 보여준다 */}
-      <div
-        aria-hidden
-        className="pointer-events-none max-h-[230px] select-none overflow-hidden blur-[10px]"
-      >
+      {/* 시안은 상세를 잘라내지 않고 끝까지 블러로 보여 준다 */}
+      <div aria-hidden className="pointer-events-none select-none blur-[6px]">
         <ResultDetail result={result} />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#EAF3FE]" />
     </div>
   )
 }

@@ -35,7 +35,7 @@ export default function IntroClient() {
         </h1>
 
         <div className="mt-[60px] flex justify-center">
-          <CrystalBall className="w-[138px] animate-float" priority />
+          <CrystalBall className="w-[138px]" spin priority />
         </div>
 
         {/* 시안의 00000 자리 — 실제 집계가 아니라 시각 기반 연출값 (lib/participants.ts) */}
