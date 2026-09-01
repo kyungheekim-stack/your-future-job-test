@@ -110,28 +110,28 @@ body {
 
 
 /*
- * 결과 히어로 배경 — 시안의 「🔵 상단 히어로 배경 (색 여기서 바꾸기)」.
+ * 결과 히어로 배경 — 디자이너가 준 BG-blue / BG-pink PNG.
  *
- * 시안 PNG 의 세로 단면을 재 보면 위쪽은 흰색이고, 카드 한가운데(y≈1300/1080폭)
- * 에서 가장 진해졌다가 다시 흰색으로 빠진다. 진한 곳도 아주 옅다.
- *   비회원  가장 진한 값 #E4F3FF
- *   가입완료 가장 진한 값 #FBD8EB
- * 카드 중심이 이 구간의 60% 근처라 그 자리에 초점을 둔다.
+ * 원본은 1080 x 4287(4373) 짜리 전체 페이지 배경인데, 색이 들어간 구간은
+ * 위쪽 절반뿐이고 아래는 흰색이다. 색 구간만 잘라 860px(shell 430 의 2배)
+ * WebP 로 구웠다 (각 9KB). 알파가 있어서 흰 배경에 합성해 두었다.
+ *
+ * 히어로 구간 높이는 카드 내용에 따라 조금씩 달라지므로 100% 100% 로
+ * 늘려 채운다. 부드러운 그라디언트라 늘어나도 티가 나지 않는다.
+ *   비회원 → blue / 가입완료 → pink
  */
+.hero-blue,
+.hero-pink {
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% 100%;
+  background-color: #ffffff;
+}
+
 .hero-blue {
-  background-image: radial-gradient(
-    82% 44% at 50% 60%,
-    #e4f3ff 0%,
-    #edf7ff 46%,
-    #ffffff 88%
-  );
+  background-image: url('/images/hero-blue.webp');
 }
 
 .hero-pink {
-  background-image: radial-gradient(
-    82% 44% at 50% 60%,
-    #fbd8eb 0%,
-    #fde9f3 46%,
-    #ffffff 88%
-  );
+  background-image: url('/images/hero-pink.webp');
 }
