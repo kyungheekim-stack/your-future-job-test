@@ -278,7 +278,7 @@ function HeroCard({
             src="/assets/halo.svg"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[129px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-45 blur-[7px]"
+            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[129px] w-[262px] -translate-x-1/2 -translate-y-1/2 opacity-65 blur-[4px]"
           />
 
           {/* 캐릭터. 시안 508 → 202, 가로 중앙.
@@ -389,9 +389,13 @@ function LockedDetail({ result }: { result: MatchResult }) {
   return (
     <div className="relative">
       {/* 시안: 상세를 blur(10px) 로 흐리게 깔아 "더 있다"를 보여준다 */}
-      {/* 시안은 상세를 잘라내지 않고 끝까지 블러로 보여 준다 */}
-      <div aria-hidden className="pointer-events-none select-none blur-[6px]">
-        <ResultDetail result={result} />
+      {/* 시안은 상세를 잘라내지 않고 끝까지 블러로 보여 준다.
+          CSS blur 는 요소 바깥으로 번져서 그대로 두면 흰 기운이 푸터 위를 덮는다.
+          바깥 div 로 한 번 감싸 잘라 낸다. */}
+      <div className="overflow-hidden">
+        <div aria-hidden className="pointer-events-none select-none blur-[6px]">
+          <ResultDetail result={result} />
+        </div>
       </div>
     </div>
   )
