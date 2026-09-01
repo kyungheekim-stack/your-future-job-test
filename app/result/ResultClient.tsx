@@ -284,15 +284,23 @@ function HeroCard({
           </p>
         </div>
 
-        {/* 별점 pill — 패널 위쪽으로 걸쳐 나온다 (card top 22, 패널 top 43) */}
-        <div className="absolute right-[14px] top-[9px] flex h-[28px] items-center justify-center gap-[3px] rounded-full border-[2.4px] border-[#B7A3FF] bg-white px-[10px]">
-          <span
-            className="font-inter text-[13px] leading-none tracking-[0.08em] text-[#F5B041]"
-            aria-label={career.rarity}
-          >
-            {'★'.repeat(career.rarityStars)}
-            <span className="text-[#E2E5EA]">{'★'.repeat(5 - career.rarityStars)}</span>
-          </span>
+        {/* 별점 pill — 패널 위쪽으로 걸쳐 나온다 (card top 22, 패널 top 43).
+            별 개수는 careers.json 의 희소성_star(★ 개수)를 그대로 따른다. */}
+        <div
+          className="absolute right-[14px] top-[9px] flex h-[28px] items-center justify-center gap-[2px] rounded-full border-[2.4px] border-[#B7A3FF] bg-white px-[10px]"
+          role="img"
+          aria-label={`希少度 ${career.rarityStars} / 5`}
+        >
+          {Array.from({ length: 5 }, (_, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={i}
+              src={i < career.rarityStars ? '/assets/star-filled.svg' : '/assets/star-empty.svg'}
+              alt=""
+              aria-hidden
+              className="h-[17px] w-[18px]"
+            />
+          ))}
         </div>
 
         {/* 직업설명 36px → 14.3 / #5D617C / 줄간격 1.41 — 데이터에 줄 나눔이 들어 있다 */}

@@ -17,13 +17,13 @@ export default function ResultDetail({ result }: { result: MatchResult }) {
       <div className="flex flex-col gap-[16px]">
         {/* AI관계타입 + 예상연봉 (gap 20) */}
         <div className="flex gap-[8px]">
-          <StatBox icon="🏷" label="AI関係タイプ">
+          <StatBox icon="/assets/icon-ai-type.svg" iconClass="size-[34px]" label="AI関係タイプ">
             {/* 타입 뱃지: bg #F6F1FF / rounded 14 / px 20 py 8 / text 36 #3A1C99 */}
             <span className="inline-block rounded-[6px] bg-[#F6F1FF] px-[8px] py-[3px] text-[14px] font-semibold leading-none text-[#3A1C99]">
               {main.aiTypeJp}
             </span>
           </StatBox>
-          <StatBox icon="💰" label="予想年収">
+          <StatBox icon="/assets/icon-salary.svg" iconClass="h-[24px] w-[31px]" label="予想年収">
             <div className="flex items-end gap-[3px]">
               <span className="text-[19px] font-bold leading-none text-[#333]">
                 {main.salary.toLocaleString('ja-JP')}
@@ -127,19 +127,21 @@ export default function ResultDetail({ result }: { result: MatchResult }) {
 /** AI관계타입 / 예상연봉 박스. 시안: h 202 / border 1.6 #DADAE2 / rounded 40 / gap 28 */
 function StatBox({
   icon,
+  iconClass,
   label,
   children,
 }: {
   icon: string
+  iconClass: string
   label: string
   children: React.ReactNode
 }) {
   return (
     <div className="flex min-w-0 flex-1 items-center gap-[11px] rounded-[16px] border-[0.7px] border-[#DADAE2] bg-white px-[5px] py-[11px]">
-      {/* TODO: 시안의 아이콘(mingcute:quill-pen-ai-fill / fa-solid:money-bill)으로 교체.
-          Figma 에셋 URL 이 이 환경에서 막혀 있어 임시로 이모지를 쓴다. */}
-      <span className="grid size-[52px] shrink-0 place-items-center rounded-[12px] text-[22px] leading-none">
-        {icon}
+      {/* 아이콘 컨테이너 130 → 52 (시안 rounded 30) */}
+      <span className="grid size-[52px] shrink-0 place-items-center rounded-[12px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={icon} alt="" aria-hidden className={iconClass} />
       </span>
       <div className="flex min-w-0 flex-col gap-[5px]">
         <p className="text-[15px] font-semibold tracking-[-0.45px] text-[#30344F]">{label}</p>
