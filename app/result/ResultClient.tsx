@@ -180,6 +180,8 @@ export default function ResultClient() {
   }
 
   const showTwoButtons = viewer === 'owner' && !detailOpen
+  /** 하단 고정 CTA 가 가리는 높이. 버튼이 2개면 그만큼 더 비워 둔다. */
+  const ctaClearance = showTwoButtons ? 150 : 106
   /**
    * '가입한 본인이 자기 결과를 보는 화면'만 특별 취급한다.
    * 시안에서 이 화면만 배경이 핑크고 푸터가 없다.
@@ -189,10 +191,7 @@ export default function ResultClient() {
 
   return (
     <main className="flex min-h-dvh flex-col bg-white font-plex">
-      <div
-        className="animate-fade-up flex flex-1 flex-col"
-        style={{ paddingBottom: showTwoButtons ? 176 : 132 }}
-      >
+      <div className="animate-fade-up flex flex-1 flex-col">
         {/* 히어로 구간. 그라디언트를 <main> 전체가 아니라 이 블록에만 건다.
             (전체에 걸면 페이지 길이에 따라 퍼져서 거의 단색으로 보인다) */}
         <section className={isMemberOwnView ? 'hero-pink' : 'hero-blue'}>
@@ -221,8 +220,13 @@ export default function ResultClient() {
           {detailOpen ? <ResultDetail result={result} /> : <LockedDetail result={result} />}
         </div>
 
-        {/* 시안 4종 중 '본인·가입완료'(29409:3891)에만 푸터가 없다 */}
-        {!isMemberOwnView && <Footer />}
+        {/* 시안 4종 중 '본인·가입완료'(29409:3891)에만 푸터가 없다.
+            푸터가 없는 화면에서는 플로팅 CTA 에 가리지 않도록 빈 공간만 둔다. */}
+        {isMemberOwnView ? (
+          <div style={{ height: ctaClearance }} />
+        ) : (
+          <Footer bottomPad={ctaClearance} />
+        )}
       </div>
 
       <FloatingCta
@@ -472,9 +476,14 @@ function PrimaryButton({
 
 /* ── 푸터 ────────────────────────────────────────────────── */
 
-function Footer() {
+function Footer({ bottomPad = 0 }: { bottomPad?: number }) {
   return (
-    <footer className="mt-9 bg-[#060E20] px-[38px] pb-14 pt-[38px]">
+    // 시안에서 상세 시트가 끝나는 지점과 푸터 시작점이 붙어 있다 (위 여백 없음).
+    // 아래쪽은 플로팅 CTA 에 가려지는 만큼 남색을 더 깔아, 버튼 뒤로 흰 띠가 비치지 않게 한다.
+    <footer
+      className="bg-[#060E20] px-[38px] pt-[38px]"
+      style={{ paddingBottom: 40 + bottomPad }}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/assets/logo-footer.svg" alt="SOCRA Tutor" className="h-[12px] w-auto" />
       <p className="mt-[22px] text-[11px] leading-[22px] tracking-[-0.41px] text-[#B5B7C6]">
