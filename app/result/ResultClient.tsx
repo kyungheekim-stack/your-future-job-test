@@ -278,16 +278,19 @@ function HeroCard({
             src="/assets/halo.svg"
             alt=""
             aria-hidden
-            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[121px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-45 blur-[7px]"
+            className="pointer-events-none absolute left-[calc(50%+6.7px)] top-[129px] w-[242px] -translate-x-1/2 -translate-y-1/2 opacity-45 blur-[7px]"
           />
 
-          {/* 캐릭터. 시안 508 → 202, 패널 상단에서 101 → 40, 가로 중앙.
-              PNG 에 알파가 있어 블렌드 모드 없이 100% 불투명하게 얹힌다. */}
+          {/* 캐릭터. 시안 508 → 202, 가로 중앙.
+              세로는 시안 값(40)보다 8px 내렸다. 시안은 캐릭터 캔버스 여백이
+              일정하다는 전제인데 실제 에셋은 그렇지 않아 위로 떠 보였다.
+              에셋을 채움 비율 0.95 로 통일하고 위치도 함께 맞췄다.
+              후광도 같은 만큼(121 → 129) 내려 캐릭터와의 간격을 유지한다. */}
           <CharacterImage
             number={career.number}
             riasec={career.riasec}
             alt={career.nameJp}
-            className="absolute left-1/2 top-[40px] size-[202px] -translate-x-1/2 object-contain"
+            className="absolute left-1/2 top-[48px] size-[202px] -translate-x-1/2 object-contain"
           />
 
           {/* 희소성 문구 23px → 9.2 / 흰색 / 좌상단 */}
