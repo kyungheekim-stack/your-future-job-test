@@ -1,13 +1,30 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import CharacterImage from '@/components/CharacterImage'
 import { planQuiz } from '@/lib/flow'
+import { LANDING_URL, REGISTER_URL } from '@/lib/links'
 import { matchCareer } from '@/lib/matching'
-import { loadSession } from '@/lib/session'
+import { clearSession, loadSession } from '@/lib/session'
+import { buildShareUrl, resultFromCareerNumber, SHARE_PARAM } from '@/lib/share'
 import type { Career, MatchResult } from '@/lib/types'
 import ResultDetail from './ResultDetail'
+
+/**
+ * 결과 화면. 시안의 카드 4종을 이 한 페이지로 처리한다.
+ *
+ *            상세      카드 밑 링크        플로팅 CTA
+ *   본인·비회원  블러   テストをもう一度    登録する + 結果をシェア
+ *   본인·가입    공개   カードを保存する    結果をシェア
+ *   공유·비회원  블러   ―                  未来の仕事をチェック
+ *   공유·가입    공개   ―                  未来の仕事をチェック
+ *
+ * 공유 페이지의 블러 여부는 "받는 사람"이 아니라 "보낸 사람"이 가입자였는지로 갈린다.
+ * 가입자가 보낸 링크는 상세가 다 보여서, 받은 사람이 "나도 해볼까"가 되는 구조다.
+ */
+
+type Viewer = 'owner' | 'shared'
 
 /** 캡처가 끝나지 않는 환경에서도 버튼이 「保存中…」로 굳지 않게 한다. */
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -30,14 +47,36 @@ export default function ResultClient() {
   const router = useRouter()
   const [name, setName] = useState('')
   const [result, setResult] = useState<MatchResult | null>(null)
-  /** 가입 전에는 상세를 blur 로 잠가 둔다 */
-  const [unlocked, setUnlocked] = useState(false)
+  const [viewer, setViewer] = useState<Viewer>('owner')
+  /** 앱 웹뷰가 ?m=1 로 알려 주는 가입 여부 */
+  const [isMember, setIsMember] = useState(false)
+  /** 상세를 펼쳤는지. 비회원이면 블러로 잠가 둔다. */
+  const [detailOpen, setDetailOpen] = useState(false)
+
   const cardRef = useRef<HTMLDivElement>(null)
   const detailRef = useRef<HTMLDivElement>(null)
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
 
   useEffect(() => {
+    // useSearchParams 를 쓰면 Suspense 경계가 강제돼 정적 프리렌더가 깨진다.
+    // 어차피 클라이언트에서만 필요한 값이라 location 에서 직접 읽는다.
+    const query = new URLSearchParams(window.location.search)
+    const shared = Number(query.get(SHARE_PARAM.career))
+
+    if (shared) {
+      const restored = resultFromCareerNumber(shared)
+      if (!restored) {
+        router.replace('/')
+        return
+      }
+      setViewer('shared')
+      setName(query.get(SHARE_PARAM.name) ?? '')
+      setDetailOpen(query.get(SHARE_PARAM.detail) === '1')
+      setResult(restored)
+      return
+    }
+
     const stored = loadSession()
     if (!stored.name) {
       router.replace('/')
@@ -48,21 +87,41 @@ export default function ResultClient() {
       router.replace('/quiz')
       return
     }
+    const member = query.get('m') === '1'
+    setViewer('owner')
     setName(stored.name)
+    setIsMember(member)
+    setDetailOpen(member)
     setResult(matchCareer(plan.score))
   }, [router])
 
-  const unlock = () => {
-    setUnlocked(true)
+  const openDetail = useCallback(() => {
+    setDetailOpen(true)
     // rAF 는 백그라운드 탭에서 멈추므로 타이머로 돌린다.
     setTimeout(() => {
       detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 60)
+  }, [])
+
+  const goRegister = () => {
+    // TODO: 유저 플로우상 여기서 설문 결과를 서버로 먼저 보낸다.
+    if (!REGISTER_URL) {
+      // 링크가 아직 없으면(프리뷰) 이동 대신 그 자리에서 상세를 펼쳐 화면을 확인한다.
+      openDetail()
+      return
+    }
+    window.location.href = REGISTER_URL
   }
 
   const shareLink = async () => {
-    const url = window.location.href
-    const title = result ? `${name}の未来の職業は「${result.main.nameJp}」です` : document.title
+    if (!result) return
+    const url = buildShareUrl(
+      window.location.origin,
+      result.main.number,
+      name,
+      detailOpen,
+    )
+    const title = `${name}の未来の職業は「${result.main.nameJp}」です`
     try {
       if (navigator.share) {
         await navigator.share({ title, url })
@@ -102,6 +161,11 @@ export default function ResultClient() {
     }
   }
 
+  const retake = () => {
+    clearSession()
+    router.push('/')
+  }
+
   if (!result) {
     return (
       <main className="result-bg grid min-h-dvh place-items-center px-6">
@@ -110,43 +174,61 @@ export default function ResultClient() {
     )
   }
 
+  const showTwoButtons = viewer === 'owner' && !detailOpen
+
   return (
     <main className="result-bg flex min-h-dvh flex-col font-plex">
-      <div className="px-4 pt-[18px]">
-        <button
-          type="button"
-          onClick={() => router.push('/')}
-          aria-label="戻る"
-          className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full transition active:opacity-60"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/icon-back.svg" alt="" aria-hidden className="h-[26px] w-[26px]" />
-        </button>
-      </div>
+      <Header />
 
-      <div className="animate-fade-up flex flex-1 flex-col">
+      <div
+        className="animate-fade-up flex flex-1 flex-col"
+        style={{ paddingBottom: showTwoButtons ? 176 : 132 }}
+      >
         <h1 className="mt-[10px] text-center text-[26px] font-semibold leading-[34px] text-[#464A65]">
-          {name}の
+          {name && `${name}の`}
           <br />
           未来の職業はこれです！
         </h1>
 
         <HeroCard cardRef={cardRef} career={result.main} />
 
-        <ActionRow onShare={shareLink} onSave={saveCard} saving={saving} />
+        {viewer === 'owner' && (
+          <CardLink
+            kind={detailOpen ? 'save' : 'retake'}
+            saving={saving}
+            onClick={detailOpen ? saveCard : retake}
+          />
+        )}
         {toast && <p className="mt-2 px-6 text-center text-[10.5px] text-[#5D617C]">{toast}</p>}
 
         <div ref={detailRef} className="mt-[22px] px-4">
-          {unlocked ? (
-            <ResultDetail result={result} />
-          ) : (
-            <LockedPreview result={result} onUnlock={unlock} />
-          )}
+          {detailOpen ? <ResultDetail result={result} /> : <LockedDetail result={result} />}
         </div>
 
         <Footer />
       </div>
+
+      <FloatingCta
+        viewer={viewer}
+        detailOpen={detailOpen}
+        onRegister={goRegister}
+        onShare={shareLink}
+        onStart={() => router.push('/')}
+      />
     </main>
+  )
+}
+
+/* ── 상단 바 ─────────────────────────────────────────────── */
+
+function Header() {
+  return (
+    <header className="flex h-[56px] items-center bg-white px-5">
+      <a href={LANDING_URL} aria-label="SOCRA Tutor ホーム">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/logo.svg" alt="SOCRA Tutor" className="h-[15px] w-auto" />
+      </a>
+    </header>
   )
 }
 
@@ -201,7 +283,7 @@ function HeroCard({
           </span>
         </div>
 
-        {/* 직업설명은 데이터에 \n 으로 줄 나눔이 지정돼 있어 그대로 살린다 */}
+        {/* 직업설명은 데이터에 줄 나눔이 지정돼 있어 그대로 살린다 */}
         <p className="mt-[11px] whitespace-pre-line px-3 text-center text-[16px] font-semibold leading-[22px] text-[#555]">
           {career.descJp}
         </p>
@@ -215,43 +297,50 @@ function HeroCard({
   )
 }
 
-/* ── 공유 / 저장 ─────────────────────────────────────────── */
+/* ── 카드 바로 밑 보조 링크 ─────────────────────────────── */
 
-function ActionRow({
-  onShare,
-  onSave,
+function CardLink({
+  kind,
   saving,
+  onClick,
 }: {
-  onShare: () => void
-  onSave: () => void
+  kind: 'retake' | 'save'
   saving: boolean
+  onClick: () => void
 }) {
   return (
-    <div className="mt-[22px] flex items-center justify-center gap-9 text-[#777B96]">
-      <button type="button" onClick={onShare} className="flex items-center gap-2 active:opacity-60">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/icon-share.png" alt="" aria-hidden className="h-[18px] w-[18px]" />
-        <span className="text-[12.8px] tracking-[-1px] underline underline-offset-[5px]">リンク共有</span>
-      </button>
+    <div className="mt-[18px] flex justify-center">
       <button
         type="button"
-        onClick={onSave}
-        disabled={saving}
-        className="flex items-center gap-1.5 active:opacity-60 disabled:opacity-60"
+        onClick={onClick}
+        disabled={kind === 'save' && saving}
+        className="flex items-center gap-[6px] text-[#777B96] active:opacity-60 disabled:opacity-60"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/assets/icon-download.svg" alt="" aria-hidden className="h-[21px] w-[21px]" />
+        {kind === 'save' ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src="/assets/icon-download.svg" alt="" aria-hidden className="h-[17px] w-[17px]" />
+        ) : (
+          <svg viewBox="0 0 24 24" className="h-[15px] w-[15px]" fill="none" aria-hidden>
+            <path
+              d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
         <span className="text-[12.8px] tracking-[-1px] underline underline-offset-[5px]">
-          {saving ? '保存中…' : 'カードを保存する'}
+          {kind === 'save' ? (saving ? '保存中…' : 'カードを保存する') : 'テストをもう一度'}
         </span>
       </button>
     </div>
   )
 }
 
-/* ── 가입 전 잠금 미리보기 ───────────────────────────────── */
+/* ── 잠긴 상세 (블러) ────────────────────────────────────── */
 
-function LockedPreview({ result, onUnlock }: { result: MatchResult; onUnlock: () => void }) {
+function LockedDetail({ result }: { result: MatchResult }) {
   return (
     <div className="relative">
       {/* 시안: 상세를 blur(10px) 로 흐리게 깔아 "더 있다"를 보여준다 */}
@@ -262,10 +351,37 @@ function LockedPreview({ result, onUnlock }: { result: MatchResult; onUnlock: ()
         <ResultDetail result={result} />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#EAF3FE]" />
+    </div>
+  )
+}
 
-      <div className="absolute inset-x-0 top-[26px] flex flex-col items-center">
-        <div className="relative rounded-[11px] bg-[#021439] px-[11px] py-[6px] text-[13px] font-semibold leading-[15px] text-white">
-          登録して詳細を見ましょう
+/* ── 하단 고정 CTA ──────────────────────────────────────── */
+
+function FloatingCta({
+  viewer,
+  detailOpen,
+  onRegister,
+  onShare,
+  onStart,
+}: {
+  viewer: Viewer
+  detailOpen: boolean
+  onRegister: () => void
+  onShare: () => void
+  onStart: () => void
+}) {
+  const shared = viewer === 'shared'
+  const tooltip = shared
+    ? '5分で完了！'
+    : detailOpen
+      ? 'Xでシェアすると1000円イベントに参加できる！'
+      : '登録して詳細を見る'
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-[430px] px-[18px] pb-[22px] pt-3">
+      <div className="flex justify-center">
+        <div className="relative rounded-[11px] bg-[#021439] px-[11px] py-[6px] text-[12.5px] font-semibold leading-[15px] text-white">
+          {tooltip}
           {/* 에셋의 삼각형은 위를 향하고 있어 아래를 가리키도록 뒤집는다 */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -275,18 +391,47 @@ function LockedPreview({ result, onUnlock }: { result: MatchResult; onUnlock: ()
             className="absolute left-1/2 top-full h-[7px] w-[15px] -translate-x-1/2 rotate-180"
           />
         </div>
-
-        <button
-          type="button"
-          onClick={onUnlock}
-          className="signup-cta mt-[13px] flex h-[68px] w-[calc(100%-36px)] items-center justify-center gap-[7px] rounded-[13.5px] text-white shadow-[0_10px_24px_rgba(78,159,243,0.35)] transition active:scale-[0.99]"
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/logo-footer.svg" alt="SOCRA Tutor" className="h-[14px] w-auto" />
-          <span className="text-[17px] font-semibold">に登録する</span>
-        </button>
       </div>
+
+      {shared ? (
+        <PrimaryButton onClick={onStart}>未来の仕事をチェック</PrimaryButton>
+      ) : detailOpen ? (
+        <PrimaryButton onClick={onShare}>結果をシェア</PrimaryButton>
+      ) : (
+        <>
+          <PrimaryButton onClick={onRegister}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/assets/logo-footer.svg" alt="SOCRA Tutor" className="h-[14px] w-auto" />
+            <span>に登録する</span>
+          </PrimaryButton>
+          <button
+            type="button"
+            onClick={onShare}
+            className="mt-[9px] flex h-[54px] w-full items-center justify-center rounded-[13.5px] border border-[#8EC2FF] bg-white text-[15.5px] font-semibold text-[#4C9EF3] transition active:scale-[0.99]"
+          >
+            結果をシェア
+          </button>
+        </>
+      )}
     </div>
+  )
+}
+
+function PrimaryButton({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="signup-cta mt-[13px] flex h-[62px] w-full items-center justify-center gap-[7px] rounded-[13.5px] text-[16.5px] font-semibold text-white shadow-[0_10px_24px_rgba(78,159,243,0.35)] transition active:scale-[0.99]"
+    >
+      {children}
+    </button>
   )
 }
 
